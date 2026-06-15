@@ -114,7 +114,7 @@ export default function DogDiary() {
       >
         <div>
           <div className="flex items-center justify-between mb-3">
-            <span className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 tracking-widest uppercase bg-white/50 dark:bg-slate-900/50 px-2 py-0.5 rounded-sm shadow-sm">
+            <span className="text-[10px] font-black text-pink-500 dark:text-pink-400 tracking-widest uppercase bg-pink-50 dark:bg-pink-900/30 px-2 py-0.5 rounded-sm shadow-sm">
               人间一日游
             </span>
             <button
@@ -124,7 +124,7 @@ export default function DogDiary() {
                 fetchQuote();
               }}
               title="换一句"
-              className="p-1.5 rounded-lg text-slate-400 hover:text-teal-600 hover:bg-white/50 dark:hover:bg-slate-700/50 transition-colors"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-pink-500 hover:bg-white/50 dark:hover:bg-slate-700/50 transition-colors"
             >
               <svg
                 className={`w-4 h-4 ${loading ? "animate-spin" : ""}`}
@@ -207,7 +207,7 @@ export default function DogDiary() {
                 type="button"
                 onClick={fetchQuote}
                 disabled={loading}
-                className="w-full py-2.5 rounded-xl bg-teal-600 text-white font-bold text-sm hover:bg-teal-700 transition-colors disabled:opacity-50"
+                className="w-full py-2.5 rounded-xl bg-pink-500 text-white font-bold text-sm hover:bg-pink-600 transition-colors disabled:opacity-50"
               >
                 {loading ? "正在人间漫步..." : "换一句"}
               </button>
