@@ -108,6 +108,9 @@ class PureHttp {
                   config.headers["Authorization"] = formatToken(
                     data.accessToken
                   );
+                  if (config.data instanceof FormData) {
+                    delete (config.headers as any)["Content-Type"];
+                  }
                   resolve(config);
                 }
               } else {
