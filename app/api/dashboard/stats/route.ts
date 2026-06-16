@@ -40,7 +40,7 @@ export async function GET() {
       prisma.message.count(),
       prisma.visitor.count(),
       prisma.$queryRaw<{ count: bigint }[]>`
-        SELECT COUNT(DISTINCT ip) as count FROM visitor
+        SELECT COUNT(DISTINCT ip) as count FROM "Visitor"
       `,
       prisma.post.findMany({
         where: {
@@ -65,7 +65,7 @@ export async function GET() {
       { date: string; count: bigint }[]
     >`
       SELECT date(created_at) as date, COUNT(DISTINCT ip) as count
-      FROM visitor
+      FROM "Visitor"
       WHERE created_at >= ${thirtyDaysAgo.toISOString()}
       GROUP BY date(created_at)
     `;
