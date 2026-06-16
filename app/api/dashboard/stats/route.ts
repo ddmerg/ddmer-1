@@ -66,7 +66,7 @@ export async function GET() {
     >`
       SELECT date(created_at) as date, COUNT(DISTINCT ip) as count
       FROM "Visitor"
-      WHERE created_at >= ${thirtyDaysAgo.toISOString()}
+      WHERE created_at >= ${thirtyDaysAgo}::timestamp
       GROUP BY date(created_at)
     `;
 
