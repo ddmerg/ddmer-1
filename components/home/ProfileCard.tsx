@@ -1,12 +1,19 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useConfigValue } from "@/components/providers/SiteConfigProvider";
 import { siteConfig } from "@/siteConfig";
 
+interface ProfileStats {
+  postCount: number;
+  chatterCount: number;
+  photoCount: number;
+}
+
 export default function ProfileCard({
-  postCount = 0,
-  chatterCount = 0,
-  photoCount = 0,
+  postCount: initialPost = 0,
+  chatterCount: initialChatter = 0,
+  photoCount: initialPhoto = 0,
 }: {
   postCount?: number;
   chatterCount?: number;
@@ -15,6 +22,51 @@ export default function ProfileCard({
   const avatarUrl = useConfigValue("avatarUrl", siteConfig.avatarUrl);
   const authorName = useConfigValue("authorName", siteConfig.authorName);
   const bio = useConfigValue("bio", siteConfig.bio);
+
+  // 客户端定期拉取最新统计，覆盖服务端渲染的初始值（Next.js 默认会缓存 server component 结果）
+  const [stats, setStats] = useState<ProfileStats>({
+    postCount: initialPost,
+    chatterCount: initialChatter,
+    photoCount: initialPhoto,
+  });
+  const [statsTick, setStatsTick] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchStats() {
+      try {
+        const r = await fetch("/api/dashboard/profile-stats?_t=" + Date.now(), {
+          cache: "no-store",
+        });
+        if (!r.ok) return;
+        const d = await r.json();
+        if (cancelled) return;
+        if (d && typeof d === "object") {
+          setStats({
+            postCount: Number(d.postCount ?? initialPost),
+            chatterCount: Number(d.chatterCount ?? initialChatter),
+            photoCount: Number(d.photoCount ?? initialPhoto),
+          });
+        }
+      } catch {
+        // ignore
+      }
+    }
+    fetchStats();
+    // 30 秒刷新一次，保证后台增删后前台数字会跟新
+    const timer = setInterval(() => {
+      setStatsTick((t) => t + 1);
+    }, 30_000);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statsTick]);
+
+  const postCount = stats.postCount;
+  const chatterCount = stats.chatterCount;
+  const photoCount = stats.photoCount;
 
   return (
     <div

@@ -92,16 +92,22 @@ async function getLocalSongs(): Promise<SongData[]> {
     orderBy: { sort: "asc" },
   });
 
-  return musics.map((m) => ({
-    id: `local-${m.id}`,
-    title: m.title,
-    artist: m.artist,
-    cover: m.cover,
-    src: m.src,
-    lrcUrl: m.lrcSrc || "",
-    type: "local" as const,
-    dbId: m.id,
-  }));
+  return musics.map((m) => {
+    // 优先使用 lrcSrc（独立 LRC 文件），没有就用 lrc（数据库里嵌入的 LRC 文本）
+    const lrcUrl =
+      m.lrcSrc ||
+      (m.lrc ? `/api/music/lrc-text?dbId=${m.id}` : "");
+    return {
+      id: `local-${m.id}`,
+      title: m.title,
+      artist: m.artist,
+      cover: m.cover,
+      src: m.src,
+      lrcUrl,
+      type: "local" as const,
+      dbId: m.id,
+    };
+  });
 }
 
 export async function GET(req: NextRequest) {

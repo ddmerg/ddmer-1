@@ -1,6 +1,10 @@
 import HomeClient from "./HomeClient";
 import { prisma } from "@/app/lib/prisma";
 
+// 首页统计是动态数据，不允许 Next.js / CDN 缓存
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 async function fetchProfileData() {
   try {
     const [postCount, chatterCount, albums] = await Promise.all([
