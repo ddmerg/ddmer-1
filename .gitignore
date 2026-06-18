@@ -59,7 +59,7 @@ fix-*.cjs
 /public/uploads
 
 # local placeholder images used during early development
-/public/images
+# /public/images
 
 # OS / editor temp
 Thumbs.db
