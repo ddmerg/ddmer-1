@@ -51,7 +51,7 @@ export const updateMine = (data: {
   });
 };
 
-/** 刷新token（后端暂未实现，占位） */
+/** 刷新token */
 export const refreshTokenApi = (data?: object) => {
   return http.request<UserResult>("post", "/api/auth/refresh-token", { data });
 };

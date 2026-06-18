@@ -186,7 +186,7 @@ export async function POST(request: Request) {
         const picExt = pic.format?.split("/").pop() || "jpg";
         const picName = generateFileName(picExt);
         const picKey = `uploads/${picName}`;
-        coverUrl = await uploadFile(picKey, pic.data.buffer, pic.format || "image/jpeg");
+        coverUrl = await uploadFile(picKey, new Uint8Array(pic.data).buffer as ArrayBuffer, pic.format || "image/jpeg");
       }
 
       // 提取内嵌歌词：USLT(MP3) / SYLT(MP3) / LYRICS(FLAC/OGG) / ©lyr(MP4) / WM/Lyrics(WMA)
@@ -234,6 +234,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: err.message }, { status: 401 });
     }
     console.error("Music upload error:", err);
-    return NextResponse.json({ error: "上传失败: " + (err.message || "未知错误"), stack: err?.stack }, { status: 500 });
+    return NextResponse.json({ error: "上传失败: " + (err.message || "未知错误") }, { status: 500 });
   }
 }

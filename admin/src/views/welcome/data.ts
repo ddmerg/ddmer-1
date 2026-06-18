@@ -5,14 +5,14 @@ import Smile from "~icons/ri/star-smile-line";
 
 const days = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 
-/** 需求人数、提问数量、解决数量、用户满意度 */
+/** 访客数、评论数、文章数、总浏览量 */
 const chartData = [
   {
     icon: GroupLine,
     bgColor: "#effaff",
     color: "#41b6ff",
     duration: 2200,
-    name: "需求人数",
+    name: "访客数",
     value: 0,
     percent: "",
     data: [] // 平滑折线图数据
@@ -22,7 +22,7 @@ const chartData = [
     bgColor: "#fff5f4",
     color: "#e85f33",
     duration: 1600,
-    name: "提问数量",
+    name: "评论数",
     value: 0,
     percent: "",
     data: []
@@ -32,7 +32,7 @@ const chartData = [
     bgColor: "#eff8f4",
     color: "#26ce83",
     duration: 1500,
-    name: "解决数量",
+    name: "文章数",
     value: 0,
     percent: "",
     data: []
@@ -42,7 +42,7 @@ const chartData = [
     bgColor: "#f6f4fe",
     color: "#7846e5",
     duration: 100,
-    name: "用户满意度",
+    name: "总浏览量",
     value: 0,
     percent: "",
     data: []
@@ -61,13 +61,10 @@ const barChartData = [
   }
 ];
 
-/** 解决概率 */
-const progressData: any[] = [];
-
 /** 数据统计 */
 const tableData: any[] = [];
 
 /** 最新动态 */
 const latestNewsData: any[] = [];
 
-export { chartData, barChartData, progressData, tableData, latestNewsData, days };
+export { chartData, barChartData, tableData, latestNewsData, days };

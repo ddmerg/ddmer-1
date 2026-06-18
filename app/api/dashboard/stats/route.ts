@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
+import { getCurrentUser } from "@/app/lib/auth";
 
 function getLast30Days(): string[] {
   const days: string[] = [];
@@ -12,8 +13,14 @@ function getLast30Days(): string[] {
   return days;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const payload = await getCurrentUser(request);
+    const userId = parseInt(payload.sub as string);
+    if (isNaN(userId)) {
+      return NextResponse.json({ error: "未登录" }, { status: 401 });
+    }
+
     const now = new Date();
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(now.getDate() - 30);
@@ -31,6 +38,10 @@ export async function GET() {
       posts30Days,
       categories,
       browserStats,
+      chattersCount,
+      musicCount,
+      friendLinksCount,
+      photosCount,
     ] = await Promise.all([
       prisma.post.count({ where: { status: "published" } }),
       prisma.post.count({ where: { status: "draft" } }),
@@ -58,6 +69,10 @@ export async function GET() {
         where: { browser: { not: "" } },
         _count: { browser: true },
       }),
+      prisma.chatter.count({ where: { status: "published" } }),
+      prisma.music.count(),
+      prisma.friendLink.count(),
+      prisma.photo.count(),
     ]);
 
     // 访客趋势：按天统计唯一IP数（去重）
@@ -106,6 +121,10 @@ export async function GET() {
         messages: messagesCount,
         visitors: Number(uniqueVisitors[0]?.count ?? 0),
         totalVisits,
+        chatters: chattersCount,
+        music: musicCount,
+        friendLinks: friendLinksCount,
+        photos: photosCount,
       },
       post_trend: postTrend,
       visitor_trend: visitorTrend,
@@ -121,7 +140,7 @@ export async function GET() {
   } catch (err: any) {
     console.error("Dashboard stats error:", err);
     return NextResponse.json(
-      { code: 1, message: err?.message || "获取统计数据失败", stack: err?.stack },
+      { code: 1, message: "获取统计数据失败" },
       { status: 500 }
     );
   }

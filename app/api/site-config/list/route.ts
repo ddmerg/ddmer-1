@@ -19,6 +19,6 @@ export async function GET(request: NextRequest) {
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "未知错误";
     const status = message.includes("未登录") || message.includes("无效的令牌") ? 401 : 500;
-    return NextResponse.json({ code: 1, message, stack: err instanceof Error ? err.stack : undefined }, { status });
+    return NextResponse.json({ code: 1, message: "获取站点配置失败" }, { status });
   }
 }

@@ -9,6 +9,10 @@ import Files from "~icons/ep/files";
 import Discount from "~icons/ep/discount";
 import Comment from "~icons/ep/comment";
 import User from "~icons/ep/user";
+import ChatDotSquare from "~icons/ep/chat-dot-square";
+import Headset from "~icons/ep/headset";
+import Link from "~icons/ep/link";
+import Picture from "~icons/ep/picture";
 
 defineOptions({ name: "Dashboard" });
 
@@ -23,17 +27,21 @@ const statCards = computed(() => {
   const c = stats.value.counts;
   return [
     { title: "已发布文章", value: c.posts, icon: Document, color: "#409eff" },
-    { title: "草稿", value: c.drafts, icon: EditPen, color: "#409eff" },
-    { title: "分类", value: c.categories, icon: Files, color: "#409eff" },
-    { title: "标签", value: c.tags, icon: Discount, color: "#409eff" },
-    { title: "评论", value: c.comments, icon: Comment, color: "#409eff" },
+    { title: "草稿", value: c.drafts, icon: EditPen, color: "#e6a23c" },
+    { title: "分类", value: c.categories, icon: Files, color: "#67c23a" },
+    { title: "标签", value: c.tags, icon: Discount, color: "#f56c6c" },
+    { title: "评论", value: c.comments, icon: Comment, color: "#909399" },
     {
       title: c.totalVisits ? `访客 (UV / PV)` : "访客",
       value: c.visitors,
       subValue: c.totalVisits,
       icon: User,
       color: "#409eff"
-    }
+    },
+    { title: "说说", value: c.chatters, icon: ChatDotSquare, color: "#e6a23c" },
+    { title: "音乐", value: c.music, icon: Headset, color: "#67c23a" },
+    { title: "友链", value: c.friendLinks, icon: Link, color: "#f56c6c" },
+    { title: "照片", value: c.photos, icon: Picture, color: "#909399" },
   ];
 });
 
@@ -193,7 +201,7 @@ onMounted(async () => {
         :key="index"
         :xs="12"
         :sm="8"
-        :md="4"
+        :md="3"
         class="mb-4"
       >
         <el-card shadow="never" class="stat-card">

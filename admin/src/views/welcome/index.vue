@@ -7,7 +7,7 @@ import { ReNormalCountTo } from "@/components/ReCountTo";
 import { useRenderFlicker } from "@/components/ReFlicker";
 import { ChartBar, ChartLine, ChartRound } from "./components/charts";
 import Segmented, { type OptionsType } from "@/components/ReSegmented";
-import { chartData as staticChartData, barChartData as staticBarChartData, latestNewsData as staticLatestNewsData, progressData as staticProgressData } from "./data";
+import { chartData as staticChartData, barChartData as staticBarChartData, latestNewsData as staticLatestNewsData } from "./data";
 import { getWelcomeStats, type WelcomeChartItem, type WelcomeStats, type WelcomeLatestItem } from "@/api/dashboard";
 
 defineOptions({
@@ -48,7 +48,6 @@ const barChartData = ref<Array<{ requireData: number[]; questionData: number[] }
   }))
 );
 const latestNewsData = ref<WelcomeLatestItem[]>([...staticLatestNewsData]);
-const progressData = ref<any[]>([...staticProgressData]);
 
 const loading = ref(false);
 
@@ -208,30 +207,13 @@ onMounted(() => {
       >
         <el-card shadow="never">
           <div class="flex justify-between">
-            <span class="text-md font-medium">解决概率</span>
+            <span class="text-md font-medium">博客统计</span>
           </div>
-          <div
-            v-for="(item, index) in progressData"
-            :key="index"
-            :class="[
-              'flex',
-              'justify-between',
-              'items-start',
-              index === 0 ? 'mt-8' : 'mt-[2.15rem]'
-            ]"
-          >
-            <el-progress
-              :text-inside="true"
-              :percentage="item.percentage"
-              :stroke-width="21"
-              :color="item.color"
-              striped
-              striped-flow
-              :duration="item.duration"
-            />
-            <span class="text-nowrap ml-2 text-text_color_regular text-sm">
-              {{ item.week }}
-            </span>
+          <div class="mt-6 space-y-4">
+            <div v-for="(item, index) in chartData" :key="index" class="flex justify-between items-center">
+              <span class="text-text_color_regular text-sm">{{ item.name }}</span>
+              <span class="font-bold text-lg">{{ item.value }}</span>
+            </div>
           </div>
         </el-card>
       </re-col>
@@ -303,9 +285,7 @@ onMounted(() => {
                 :timestamp="item.date"
               >
                 <p class="text-text_color_regular text-sm">
-                  {{
-                    `新增 ${item.requiredNumber} 条问题，${item.resolveNumber} 条已解决`
-                  }}
+                  {{ item.type === 'post' ? `发布文章：${item.title}` : `发布说说：${item.title}` }}
                 </p>
               </el-timeline-item>
             </el-timeline>

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
-import { verifyPassword, createToken } from "@/app/lib/auth";
+import { verifyPassword, createToken, createRefreshToken } from "@/app/lib/auth";
 import {
   getLoginAttempts,
   recordLoginFailure,
@@ -68,6 +68,10 @@ export async function POST(request: Request) {
       username: user.username,
       type: "user"
     });
+    const refreshToken = await createRefreshToken({
+      sub: String(user.id),
+      username: user.username,
+    });
     const expires = Date.now() + 72 * 60 * 60 * 1000;
 
     return NextResponse.json({
@@ -75,7 +79,7 @@ export async function POST(request: Request) {
       message: "success",
       data: {
         accessToken,
-        refreshToken: "",
+        refreshToken,
         expires,
         avatar: user.avatar,
         username: user.username,

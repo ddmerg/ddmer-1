@@ -3,7 +3,6 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand,
-  PutBucketCorsCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -30,33 +29,15 @@ function getBucketName(): string {
   return process.env.R2_BUCKET_NAME || "kirameku-files";
 }
 
-let corsConfigured = false;
-
-async function ensureCorsConfigured(): Promise<void> {
-  if (corsConfigured) return;
-  const client = getS3Client();
-  const bucket = getBucketName();
-  try {
-    await client.send(
-      new PutBucketCorsCommand({
-        Bucket: bucket,
-        CORSConfiguration: {
-          CORSRules: [
-            {
-              AllowedHeaders: ["*"],
-              AllowedMethods: ["PUT", "POST", "GET", "DELETE", "HEAD"],
-              AllowedOrigins: ["*"],
-              MaxAgeSeconds: 3600,
-            },
-          ],
-        },
-      })
-    );
-    corsConfigured = true;
-  } catch (e) {
-    console.error("R2 CORS config error:", e);
-  }
-}
+/**
+ * CORS 配置说明：
+ * 请在 Cloudflare R2 控制台预设 CORS 规则，避免 Serverless 冷启动时重复配置。
+ * 推荐设置：
+ *   AllowedOrigins: ["*"]
+ *   AllowedMethods: ["PUT", "POST", "GET", "DELETE", "HEAD"]
+ *   AllowedHeaders: ["*"]
+ *   MaxAgeSeconds: 3600
+ */
 
 export async function uploadFile(
   key: string,
@@ -154,7 +135,6 @@ export async function getPresignedUploadUrl(
   contentType: string,
   expiresIn: number = 300
 ): Promise<string> {
-  await ensureCorsConfigured();
   const client = getS3Client();
   const bucket = getBucketName();
   const command = new PutObjectCommand({

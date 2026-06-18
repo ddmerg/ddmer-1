@@ -16,6 +16,7 @@ function getSecretKey(): Uint8Array {
 const SECRET_KEY = getSecretKey();
 const ALGORITHM = "HS256";
 const ACCESS_TOKEN_EXPIRE_HOURS = 72;
+const REFRESH_TOKEN_EXPIRE_DAYS = 30;
 
 export function hashPassword(password: string): string {
   return bcrypt.hashSync(password, 10);
@@ -29,6 +30,13 @@ export async function createToken(payload: Record<string, unknown>): Promise<str
   return new SignJWT(payload)
     .setProtectedHeader({ alg: ALGORITHM })
     .setExpirationTime(`${ACCESS_TOKEN_EXPIRE_HOURS}h`)
+    .sign(SECRET_KEY);
+}
+
+export async function createRefreshToken(payload: Record<string, unknown>): Promise<string> {
+  return new SignJWT({ ...payload, type: "refresh" })
+    .setProtectedHeader({ alg: ALGORITHM })
+    .setExpirationTime(`${REFRESH_TOKEN_EXPIRE_DAYS}d`)
     .sign(SECRET_KEY);
 }
 

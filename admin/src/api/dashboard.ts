@@ -10,6 +10,10 @@ export type DashboardStats = {
     messages: number;
     visitors: number;
     totalVisits?: number;
+    chatters: number;
+    music: number;
+    friendLinks: number;
+    photos: number;
   };
   post_trend: Array<{ date: string; count: number }>;
   visitor_trend: Array<{ date: string; count: number }>;

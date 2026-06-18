@@ -99,7 +99,7 @@ export async function POST(request: Request) {
         if (!coverFile && meta.coverBuffer) {
           const coverName = generateFileName(meta.coverExt || "jpg");
           const coverKey = `uploads/${coverName}`;
-          coverUrl = await uploadFile(coverKey, meta.coverBuffer.buffer, "image/" + (meta.coverExt || "jpeg"));
+          coverUrl = await uploadFile(coverKey, new Uint8Array(meta.coverBuffer).buffer as ArrayBuffer, "image/" + (meta.coverExt || "jpeg"));
         }
       } catch (e) {
         console.error("EPUB parse error:", e);
@@ -157,6 +157,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: err.message }, { status: 401 });
     }
     console.error("Book upload error:", err);
-    return NextResponse.json({ error: "上传失败: " + (err?.message || "未知错误"), stack: err?.stack }, { status: 500 });
+    return NextResponse.json({ error: "上传失败: " + (err?.message || "未知错误") }, { status: 500 });
   }
 }

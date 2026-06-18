@@ -60,7 +60,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: err.message }, { status: 401 });
     }
     console.error("Upload image error:", err);
-    return NextResponse.json({ error: err?.message || "上传失败", stack: err?.stack }, { status: 500 });
+    return NextResponse.json({ error: "上传失败" }, { status: 500 });
   }
 }
 
