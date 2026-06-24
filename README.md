@@ -50,5 +50,13 @@ npm run build
 
 ## 部署
 
-参考 [DEPLOY_NOTES.md](./DEPLOY_NOTES.md) 了解部署注意事项。
+- **Vercel 部署（推荐）：** 参考 [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)
+- **服务器自建部署：** 参考 [docs/SERVER_DEPLOY.md](./docs/SERVER_DEPLOY.md)（支持 Docker / PM2 两种方式）
+- **部署踩坑记录：** [DEPLOY_NOTES.md](./DEPLOY_NOTES.md)
 
+## 相关链接
+
+- **原项目作者 GitHub：** [github.com/Xinghongia](https://github.com/Xinghongia)
+- **原项目主页：** [Starhiro の小站](https://hiromu.top)
+
+> 基于开源，致敬原创。
